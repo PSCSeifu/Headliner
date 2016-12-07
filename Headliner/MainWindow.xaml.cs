@@ -74,7 +74,6 @@ namespace Headliner
             urlList.Add(new Tuple<Uri, string>(new Uri("https://fsharpforfunandprofit.com/"), "FSHARPFORFUNANDPROFIT"));
             urlList.Add(new Tuple<Uri, string>(new Uri("http://www.infoq.com"), "INFOQ"));
 
-
             return urlList;
         }
 
