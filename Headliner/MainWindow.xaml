@@ -11,13 +11,14 @@
             <ColumnDefinition Width="6*"/>
             <ColumnDefinition Width="511*"/>
         </Grid.ColumnDefinitions>
-        <ListView x:Name="listView" Grid.Column="1" HorizontalAlignment="Left" Margin="23,10,0,144" Width="524">
+        <ListView x:Name="listView" Grid.Column="1" HorizontalAlignment="Left" Margin="23,76,0,144" Width="524">
             <ListView.View>
                 <GridView>
                     <GridViewColumn/>
                 </GridView>
             </ListView.View>
         </ListView>
+        <ListBox x:Name="sitelistBox" Grid.Column="1" HorizontalAlignment="Left" Height="52" Margin="23,19,0,0" VerticalAlignment="Top" Width="272"/>
 
     </Grid>
 </Window>

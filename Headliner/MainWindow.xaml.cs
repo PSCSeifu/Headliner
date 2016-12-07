@@ -26,10 +26,14 @@ namespace Headliner
         public MainWindow()
         {
             InitializeComponent();
-            HeadlineFilter();
+            InitInterface();
         }
 
-
+        public void InitInterface()
+        {
+            HeadlineFilter();
+            PopulateSiteListbox();
+        }
 
         public async Task<List<string>> DownloadHtml(Uri url)
         {
@@ -48,7 +52,15 @@ namespace Headliner
             return joined.ToList();
         }
 
-       
+        public void PopulateSiteListbox()
+        {
+            UrlSource().ForEach(GetName);
+        }
+
+        public void GetName(Tuple<Uri, string> input)
+        {
+            this.sitelistBox.Items.Add(input.Item2);
+        }
 
         public async Task<string> GetHtmlAsync( Uri url)
         {
