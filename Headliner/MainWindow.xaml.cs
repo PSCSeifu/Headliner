@@ -94,20 +94,16 @@ namespace Headliner
             foreach (var url in UrlSource())
             {
                 var test = await DownloadHtml(url.Item1);
-
-                //this.htmlbox.Text += string.Format("From Website {0}", url.Item2) + Environment.NewLine;
+                               
                 this.listView.Items.Add(string.Format("From Website {0}", url.Item2) + Environment.NewLine);
 
                 foreach (var text in test.Where(x => x != "").Take(15))
                 {
-                    this.listView.Items.Add(text.Trim());
-                    //this.htmlbox.Text +=   text + Environment.NewLine;                    
+                    this.listView.Items.Add(text.Trim());                                     
                 }
-
-               // this.htmlbox.Text += "----------------------------------" + Environment.NewLine;
+                
                 this.listView.Items.Add("----------------------------------" + Environment.NewLine);                
             }
-
         }
 
        
