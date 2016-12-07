@@ -22,7 +22,7 @@ namespace Headliner
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
-    {
+    {      
         public MainWindow()
         {
             InitializeComponent();
@@ -54,7 +54,7 @@ namespace Headliner
 
         public void PopulateSiteListbox()
         {
-            UrlSource().ForEach(GetName);
+            UrlSource.UrlSources().ForEach(GetName);
         }
 
         public void GetName(Tuple<Uri, string> input)
@@ -76,38 +76,38 @@ namespace Headliner
             var html = await download;
             return html;
         }
-        
-        public List<Tuple<Uri, string>> UrlSource()
-        {
-            List<Tuple<Uri, string>> urlList = new List<Tuple<Uri, string>>();
-            urlList.Add(new Tuple<Uri, string>(new Uri("http://www.zerohedge.com"), "ZEROHEDGE"));
-            urlList.Add(new Tuple<Uri, string>(new Uri("https://www.codeproject.com"), "CODEPROJECT"));
-            urlList.Add(new Tuple<Uri, string>(new Uri("http://www.stackoverflow.com"), "STACKOVERFLOW"));
-            urlList.Add(new Tuple<Uri, string>(new Uri("https://fsharpforfunandprofit.com/"), "FSHARPFORFUNANDPROFIT"));
-            urlList.Add(new Tuple<Uri, string>(new Uri("http://www.infoq.com"), "INFOQ"));
-
-            return urlList;
-        }
-
+       
         public async void HeadlineFilter()
         {
-            foreach (var url in UrlSource())
+            List<Tuple<Uri, string>> list = UrlSource.UrlSources();
+            foreach (var url in list)
             {
-                var test = await DownloadHtml(url.Item1);
-                               
-                this.listView.Items.Add(string.Format("From Website {0}", url.Item2) + Environment.NewLine);
+                var data = await DownloadHtml(url.Item1).ToObservable();
 
-                foreach (var text in test.Where(x => x != "").Take(15))
-                {
-                    this.listView.Items.Add(text.Trim());                                     
-                }
+                PopulateListView(data, url.Item2);
                 
-                this.listView.Items.Add("----------------------------------" + Environment.NewLine);                
+
+                //    this.listView.Items.Add($"From Website {url.Item2} {Environment.NewLine}");
+
+                //    foreach (var text in test.Where(x => x != "").Take(15))
+                //    {
+                //        this.listView.Items.Add(text.Trim());                                     
+                //    }                
+                //    this.listView.Items.Add($"----------------------------------{Environment.NewLine}");
+                //}
             }
+
         }
 
-       
+        public void PopulateListView(List<string> dataList, string siteName)
+        {
+            this.listView.Items.Add($"From Website {siteName} {Environment.NewLine}");
 
-
+            foreach (var text in dataList.Where(x => x != "").Take(15))
+            {
+                this.listView.Items.Add(text.Trim());
+            }
+            this.listView.Items.Add($"----------------------------------{Environment.NewLine}");
+        }
     }
 }
