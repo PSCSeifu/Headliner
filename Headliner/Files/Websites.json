@@ -1,0 +1,22 @@
+[
+  {
+    "WebSiteUri": "http://www.zerohedge.com",
+    "SiteName": "ZEROHEDGE"
+  },
+  {
+    "WebSiteUri": "https://www.codeproject.com",
+    "SiteName": "CODEPROJECT"
+  },
+  {
+    "WebSiteUri": "https://fsharpforfunandprofit.com/",
+    "SiteName": "FSHARPFORFUNANDPROFIT"
+  },
+  {
+    "WebSiteUri": "http://www.infoq.com",
+    "SiteName": "INFOQ"
+  },
+  {
+    "WebSiteUri": "https://www.rt.com/news",
+    "SiteName": "RT"
+  }
+]

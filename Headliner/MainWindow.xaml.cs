@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Headliner.Lib;
+using Headliner.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -35,31 +37,18 @@ namespace Headliner
             PopulateSiteListbox();
         }
 
-        public async Task<List<string>> DownloadHtml(Uri url)
+        public async Task<List<string>> DownloadHtml(Website website)
         {
-            var client = new WebClient();
-            var download = client.DownloadString(url);
+            var result = await Downloader.GetHtmlByWebsite(website);
+            return Downloader.GetHeadlineList(result).ToList();
 
-            var parser = new  AngleSharp.Parser.Html.HtmlParser();
-            var result = await parser.ParseAsync(download);
+            //var headline = result.GetElementsByClassName("title").Select( x => x.TextContent);
+            //var links = result.GetElementsByTagName("a").Select(x => x.TextContent);
+            //var logo = result.GetElementsByClassName("logo").Select(x => x.InnerHtml);
 
-            var headline = result.GetElementsByClassName("title").Select( x => x.TextContent);
-            var links = result.GetElementsByTagName("a").Select(x => x.TextContent);
-            var logo = result.GetElementsByClassName("logo").Select(x => x.InnerHtml);
+            //var joined = headline.Union(links.Union(logo));
 
-            var joined = headline.Union(links.Union(logo));
-
-            return joined.ToList();
-        }
-
-        public void PopulateSiteListbox()
-        {
-            UrlSource.UrlSources().ForEach(GetName);
-        }
-
-        public void GetName(Tuple<Uri, string> input)
-        {
-            this.sitelistBox.Items.Add(input.Item2);
+            //return joined.ToList();
         }
 
         public async Task<string> GetHtmlAsync( Uri url)
@@ -78,25 +67,31 @@ namespace Headliner
         }
        
         public async void HeadlineFilter()
-        {
-            List<Tuple<Uri, string>> list = UrlSource.UrlSources();
-            foreach (var url in list)
+        {           
+            foreach (var site in TheInternet.ReadFile())
             {
-                var data = await DownloadHtml(url.Item1).ToObservable();
+                var data = await DownloadHtml(site);
+                var list = data.ToObservable().Take(5).Select(x =>x);
 
-                PopulateListView(data, url.Item2);
-                
+                list.Subscribe(
+                     x => PopulateView(x, site.SiteName)
+                    );
 
-                //    this.listView.Items.Add($"From Website {url.Item2} {Environment.NewLine}");
-
-                //    foreach (var text in test.Where(x => x != "").Take(15))
-                //    {
-                //        this.listView.Items.Add(text.Trim());                                     
-                //    }                
-                //    this.listView.Items.Add($"----------------------------------{Environment.NewLine}");
-                //}
+                //PopulateListView(data.Latest().Single(), site.SiteName);                
             }
 
+        }
+        #region UI Methods
+
+        public void PopulateView(string text, string siteName)
+        {
+            //this.listView.Items.Add($"From Website {siteName} {Environment.NewLine}");
+
+            //foreach (var text in dataList.Where(x => x != "").Take(15))
+            //{
+                this.listView.Items.Add($"Site : {siteName} | {Environment.NewLine} {text.Trim()}");
+            //}
+           // this.listView.Items.Add($"-----------------------------------------------------------{Environment.NewLine}");
         }
 
         public void PopulateListView(List<string> dataList, string siteName)
@@ -109,5 +104,17 @@ namespace Headliner
             }
             this.listView.Items.Add($"----------------------------------{Environment.NewLine}");
         }
+
+        public void PopulateSiteListbox()
+        {
+            TheInternet.ReadFile().ForEach(GetName);
+        }
+
+        public void GetName(Website site)
+        {
+            this.sitelistBox.Items.Add(site.SiteName);
+        }
+
+        #endregion
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Headliner.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,6 +10,19 @@ namespace Headliner
 
     public static class UrlSource
     {
+
+        public static List<Website> GetWebsites()
+        {
+            List<Website> websites = new List<Website>();
+            websites.Add( new  Website(new Uri("http://www.zerohedge.com"), "ZEROHEDGE"));
+            websites.Add(new Website(new Uri("https://www.codeproject.com"), "CODEPROJECT"));
+            websites.Add(new Website(new Uri("https://fsharpforfunandprofit.com/"), "FSHARPFORFUNANDPROFIT"));
+            websites.Add(new Website(new Uri("http://www.infoq.com"), "INFOQ"));
+            websites.Add(new Website(new Uri("http://www.rt.com"), "RT"));
+
+            return websites;
+        }
+
         public static List<Tuple<Uri, string>> UrlSources()
         {
             List<Tuple<Uri, string>> urlList = new List<Tuple<Uri, string>>();
