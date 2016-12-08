@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
+using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Reactive.Threading.Tasks;
 using System.Text;
@@ -46,29 +47,54 @@ namespace Headliner
             
         }
 
-        public async void InitInterface()
+        public  void InitInterface()
         {
-           
-            await HeadlineFilter();
+            ShowHeadlines();
+            // HeadlineFilter();
             PopulateSiteListbox();
             ShowWaitingGif(this.spinner, false);
         }
 
-        public  async Task<int> HeadlineFilter()
+
+        public async void HeadlineFilter2(Website site)
         {
             if (this.listView.Items.Count > 0) { this.listView.Items.Clear(); }
+            var data = await Downloader.DownloadHtml(site);
+            var dataStream = data.ToObservable()
+                            .ObserveOn(SynchronizationContext.Current)
+                            .Where( x => x.Length > 5)
+                            .Select( x => x.Trim())
+                            .Take(5)                            
+                            .Subscribe(test => this.listView.Items.Add($"Site : {site.SiteName} | {Environment.NewLine} {test}"));
+        }
+
+        public void ShowHeadlines()
+        {
+            TheInternet.ReadFile().ForEach(HeadlineFilter2);
+        }
+
+        public async void HeadlineFilter()
+        {
+            if (this.listView.Items.Count > 0) { this.listView.Items.Clear(); }
+
+            //var seq = Observable.Interval(TimeSpan.FromMilliseconds(1500))
+            //    .Select( x => x)
+            //    .ObserveOn(SynchronizationContext.Current)
+            //    .Subscribe( test => this.listView.Items.Add(test));
+
             foreach (var site in TheInternet.ReadFile())
             {
                 var data = await Downloader.DownloadHtml(site);
-                var list = data.ToObservable()                                
-                                .Take(5)                               
+                var list = data.ToObservable()
+                    .SubscribeOn(NewThreadScheduler.Default)
+                                .Take(5)
                                 .Select(x => x);
 
-                list.Subscribe(
+                list.ObserveOn(SynchronizationContext.Current).Subscribe(
                      x => PopulateView(x, site.SiteName)
-                    );          
+                    );
             }
-            return 1;
+            // return 1;
         }
 
         #region UI Methods

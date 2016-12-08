@@ -7,12 +7,17 @@
   {
     "WebSiteUri": "https://www.codeproject.com",
     "SiteName": "CODEPROJECT",
-    "ClassTag": ""
+    "ClassTag": "title"
   },
   {
-    "WebSiteUri": "https://fsharpforfunandprofit.com",
-    "SiteName": "FSHARPFORFUNANDPROFIT",
-    "ClassTag": ""
+    "WebSiteUri": "https://dzone.com/",
+    "SiteName": "DZONE",
+    "ClassTag": "featured-articles-title "
+  },
+  {
+    "WebSiteUri": "https://dzone.com/",
+    "SiteName": "DZONE",
+    "ClassTag": "featured-articles-title "
   },
   {
     "WebSiteUri": "http://www.infoq.com",

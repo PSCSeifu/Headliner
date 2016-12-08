@@ -24,16 +24,15 @@ namespace Headliner.Lib
         }
 
         //main-promobox__link
-        public static List<string> GetHeadlineList(IHtmlDocument doc)
-        {
-            var joined = doc.GetElementsByClassName("title").Select(x => x.TextContent)
-                .Union(doc.GetElementsByTagName("a href").Select(x => x.TextContent))
-                .Union(doc.GetElementsByClassName("main-promobox__link").Select(x => x.TextContent)
-                ).ToList();
+        //public static List<string> GetHeadlineList(IHtmlDocument doc)
+        //{
+        //    var joined = doc.GetElementsByClassName("title").Select(x => x.TextContent)
+        //        .Union(doc.GetElementsByTagName("a href").Select(x => x.TextContent))
+        //        .Union(doc.GetElementsByClassName("main-promobox__link").Select(x => x.TextContent)
+        //        ).ToList();
 
-
-            return joined;
-        }
+        //    return joined;
+        //}
 
         public static List<string> GetHeadlineList(IHtmlDocument doc,string tagname)
         {
@@ -44,15 +43,12 @@ namespace Headliner.Lib
         {
             var result = await Downloader.GetHtmlByWebsite(website);
             return Downloader.GetHeadlineList(result,website.ClassTag).ToList();
-
-            //var headline = result.GetElementsByClassName("title").Select( x => x.TextContent);
-            //var links = result.GetElementsByTagName("a").Select(x => x.TextContent);
-            //var logo = result.GetElementsByClassName("logo").Select(x => x.InnerHtml);
-
-            //var joined = headline.Union(links.Union(logo));
-
-            //return joined.ToList();
         }
+
+        //public static async GetSiteHeadlines()
+        //{
+
+        //}
 
         
 
