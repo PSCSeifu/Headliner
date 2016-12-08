@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net;
+using System.Reactive;
 using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Reactive.Threading.Tasks;
@@ -31,7 +32,7 @@ namespace Headliner
     {      
         public MainWindow()
         {
-            //Trace.WriteLine($"Thread Name : {SynchronizationContext.Current.ToString()}");
+            Debug.WriteLine($"Current thread Id in ctor : {Thread.CurrentThread.ManagedThreadId}");
             InitializeComponent();
             ShowWaitingGif(this.spinner, true);
 
@@ -47,30 +48,66 @@ namespace Headliner
             
         }
 
-        public  void InitInterface()
+        public void InitInterface()
         {
-            ShowHeadlines();
+            TestStream();
+           // HeadlineFilter2();
+            //ShowHeadlines();
             // HeadlineFilter();
-            PopulateSiteListbox();
-            ShowWaitingGif(this.spinner, false);
+            //PopulateSiteListbox();
+            //ShowWaitingGif(this.spinner, false);
         }
 
+        public async void TestStream()
+        {
+            Debug.WriteLine($"Current thread Id a : {Thread.CurrentThread.ManagedThreadId}");
+            //var seq = Observable.Interval(TimeSpan.FromMilliseconds(200));
+            var res = await Task.Run( () => TheInternet.TestLongProcess());
 
-        public async void HeadlineFilter2(Website site)
+            var seq = res.ToObservable();
+
+
+
+
+            Debug.WriteLine($"Current thread Id b : {Thread.CurrentThread.ManagedThreadId}");
+            var ui = seq
+                        .ObserveOn(Dispatcher)
+                         .Select(x => x)
+                        .Take(90)
+                        .Subscribe(test => this.listView.Items.Add(test));
+        }
+
+        public async void HeadlineFilter2()
         {
             if (this.listView.Items.Count > 0) { this.listView.Items.Clear(); }
-            var data = await Downloader.DownloadHtml(site);
-            var dataStream = data.ToObservable()
-                            .ObserveOn(SynchronizationContext.Current)
-                            .Where( x => x.Length > 5)
-                            .Select( x => x.Trim())
-                            .Take(5)                            
-                            .Subscribe(test => this.listView.Items.Add($"Site : {site.SiteName} | {Environment.NewLine} {test}"));
+
+            Debug.WriteLine($"Current thread Id before loop : {Thread.CurrentThread.ManagedThreadId}");
+
+            foreach (var site in TheInternet.ReadFile())
+            {
+                Debug.WriteLine($"Current thread Id in loop: {Thread.CurrentThread.ManagedThreadId}");
+                var data = await Downloader.DownloadHtml(site);
+
+                //var dataStream = data.ToObservable()
+                //                .ObserveOn(SynchronizationContext.Current)
+                //                .Where( x => x.Length > 5)
+                //                .Select( x => x.Trim())
+                //                .Take(9)                            
+                //                .Subscribe(test => this.listView.Items.Add($"Site : {site.SiteName} | {Environment.NewLine} {test}"));
+
+                var ui = data.ToObservable()
+                                .ObserveOn(Dispatcher)
+                                .Where(x => x.Length > 5)
+                                .Select(x => x.Trim())
+                                .Take(9)
+                                .Subscribe(test => this.listView.Items.Add($"Site : {site.SiteName} | {Environment.NewLine} {test}"));
+                Debug.WriteLine($"Current thread Id in loop: {Thread.CurrentThread.ManagedThreadId}");
+            }
         }
 
         public void ShowHeadlines()
         {
-            TheInternet.ReadFile().ForEach(HeadlineFilter2);
+            //TheInternet.ReadFile().ForEach(HeadlineFilter2);
         }
 
         public async void HeadlineFilter()
