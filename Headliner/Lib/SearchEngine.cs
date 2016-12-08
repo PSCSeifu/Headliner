@@ -1,4 +1,5 @@
 ﻿using AngleSharp.Dom.Html;
+using Headliner.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,19 +10,33 @@ namespace Headliner.Lib
 {
     public class SearchEngine
     {
-        public static List<string> SearchByWord(IHtmlDocument doc, string searchWord)
+        public static async Task<List<string>> SearchByWord(Website website, string searchWord)
         {
-            var joined = doc.GetElementsByClassName("title").Select(x => x.TextContent)
-                .Union(doc.GetElementsByTagName("a href").Select(x => x.TextContent))
-                .Union(doc.GetElementsByClassName("main-promobox__link").Select(x => x.TextContent)
-                ).ToList();
-            List<string> filterd = new List<string>();
+            var result = await Downloader.DownloadHtml(website);
 
-            foreach (var item in joined)
+            var filtered = result.Where(x => x.Contains(searchWord))
+                .Select(x => x)
+                .ToList();                
+            
+            return filtered;
+        }
+
+
+        public static async Task<List<string>> Search(Website website,string word)
+        {
+            return await SearchByWord(website, word);
+        }
+
+        public static async Task<List<string>> SearchWebSites(List<Website> websites, string searchWord)
+        {
+            List<string> resultList = new List<string>();
+            foreach (var site in websites)
             {
-                filterd.Add(item);
+                resultList = await  SearchByWord(site, searchWord);
             }
-            return filterd;
+
+            return resultList;
+           
         }
     }
 }

@@ -21,9 +21,9 @@
             </ListView.View>
         </ListView>
         <ListBox x:Name="sitelistBox" Grid.Column="1" HorizontalAlignment="Left" Height="98" Margin="23,19,0,0" VerticalAlignment="Top" Width="272"/>
-        <TextBox x:Name="textBox" Grid.Column="1" HorizontalAlignment="Left" Height="31" Margin="319,19,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="403"/>
+        <TextBox x:Name="textBox" Grid.Column="1" HorizontalAlignment="Left" Height="31" Margin="319,19,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="403" TextChanged="textBox_TextChanged"/>
         <Image Name="spinner"></Image>
-        <Button x:Name="button" Content="Search" Grid.Column="1" HorizontalAlignment="Left" Height="53" Margin="542,64,0,0" VerticalAlignment="Top" Width="180"/>
+        <Button x:Name="search" Content="Search" Grid.Column="1" HorizontalAlignment="Left" Height="53" Margin="542,64,0,0" VerticalAlignment="Top" Width="180"/>
         <Label x:Name="statuslabel" Content="" Grid.Column="1" HorizontalAlignment="Left" Height="47" Margin="32,595,0,0" VerticalAlignment="Top" Width="690"/>
         <Button x:Name="Getall" Content="Get All" Grid.Column="1" HorizontalAlignment="Left" Height="53" Margin="319,64,0,0" VerticalAlignment="Top" Width="174"/>
 

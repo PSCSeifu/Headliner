@@ -47,7 +47,7 @@ namespace Headliner
                InitInterface();
            });
 
-        }
+                    }
 
         public void InitInterface()
         {
@@ -72,6 +72,23 @@ namespace Headliner
             }
         }
 
+        //public async void Search(WebsiteType type, string text, int headlines)
+        //{
+        //    int countSites = 0;
+        //    List<Website> allSites = TheInternet.ReadFile(type);
+        //    int totalSites = (allSites.Count() == 0) ? 1 : allSites.Count();
+
+        //    if (this.listView.Items.Count > 0) { this.listView.Items.Clear(); }
+        //    if (this.sitelistBox.Items.Count > 0) { this.sitelistBox.Items.Clear(); }
+
+        //    PopulateSiteListbox();
+
+        //    foreach (var site in allSites)
+        //    {
+        //        countSites++;
+        //        SearchSite(site, text, headlines);
+        //    }
+        //}
         private IDisposable statusLabel;
 
         public async void DisplayBulkHeadLines(WebsiteType type, int headlines)
@@ -108,9 +125,23 @@ namespace Headliner
             statusLabel.Dispose();
         }
 
+        public async void SearchSite (Website website, string text, int headlines)
+        {
+            //Convert the TextCHanged event to IObservable<string>
+            var searchInput = Observable.FromEventPattern(this.textBox, "TextChanged")
+                        .Select(e => this.textBox.Text)
+                        .Throttle(TimeSpan.FromSeconds(0.5))
+                        .DistinctUntilChanged();
+
+            var res = await Task.Run(() =>  SearchEngine.Search(website, searchInput.ToString()));
+
+            res.ToObservable()
+                .Select( x => x)
+                .Subscribe(y => PopulateView(website,y));
+        }
+
         #region UI Methods
 
-        
 
         public void PopulateLabel(string value)
         {
@@ -147,5 +178,30 @@ namespace Headliner
         }
 
         #endregion
+
+        private async void textBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            List<Website> allSites = TheInternet.ReadFile();
+
+            var searchInput = Observable.FromEventPattern(this.textBox, "TextChanged")
+                        .Select(w => this.textBox.Text)
+                        .Throttle(TimeSpan.FromSeconds(0.5))
+                        .DistinctUntilChanged();
+                                    
+
+            Tools.DebugTrace("ctor", Thread.CurrentThread.ManagedThreadId);
+            Tools.DebugTrace(searchInput.ToString(), Thread.CurrentThread.ManagedThreadId);
+
+            //var res = await Task.Run( () => SearchEngine.SearchWebSites(allSites, searchInput.ToString()) );
+            foreach (var site in allSites)
+            {
+                var res = await Task.Run(() => SearchEngine.Search(site, searchInput.ToString()));
+
+                res.ToObservable()
+                    .Select(x => x)
+                    .Subscribe(y => PopulateView(site, y));
+            }
+           
+        }
     }
 }
