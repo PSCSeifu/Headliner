@@ -33,7 +33,7 @@ namespace Headliner
     {      
         public MainWindow()
         {
-            Debug.WriteLine($"Current thread Id in ctor : {Thread.CurrentThread.ManagedThreadId}");
+           Tools.DebugTrace("ctor", Thread.CurrentThread.ManagedThreadId);            
             InitializeComponent();
             ShowWaitingGif(this.spinner, true);
             
@@ -72,6 +72,8 @@ namespace Headliner
             }
         }
 
+        private IDisposable statusLabel;
+
         public async void DisplayBulkHeadLines(WebsiteType type, int headlines)
         {
             int countSites = 0;            
@@ -83,8 +85,12 @@ namespace Headliner
 
             PopulateSiteListbox();
             
+
+
             foreach (var site in allSites)
             {
+                Tools.DebugTrace("siteloop", Thread.CurrentThread.ManagedThreadId);
+                
                 countSites++;
                 var data = await Task.Run( () => Downloader.DownloadHtml(site));
 
@@ -95,13 +101,16 @@ namespace Headliner
                                 .Take(headlines)
                                 .Subscribe(x => PopulateView(site, x));
 
-                var statusLabel = data.ToObservable()
+                statusLabel = data.ToObservable()
                     .ObserveOn(Dispatcher)
                     .Subscribe(x => PopulateLabel($"From {site.SiteName}  |  Feteched {countSites} of {totalSites}"));
             }
+            statusLabel.Dispose();
         }
 
         #region UI Methods
+
+        
 
         public void PopulateLabel(string value)
         {
@@ -114,7 +123,7 @@ namespace Headliner
             if (show)
             {               
                 image.BeginInit();
-                image.UriSource = new Uri(TheInternet._waitingGifPath);
+                image.UriSource = new Uri(Tools._waitingGifPath);
                 image.EndInit();
                 ImageBehavior.SetAnimatedSource(element, image);
             }

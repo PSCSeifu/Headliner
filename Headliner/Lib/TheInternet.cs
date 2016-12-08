@@ -16,15 +16,13 @@ namespace Headliner.Lib
 {
     public class TheInternet
     {
-        private static string _jsonPath = System.Configuration.ConfigurationManager.AppSettings["WebSiteFilePath"];
-        public static string _waitingGifPath = System.Configuration.ConfigurationManager.AppSettings["WaitingGifFilePath"];
-
+        
         public static  List<Website> ReadFile()
         {
             List<Website> sites = new List<Website>();
             try
             {
-                using (StreamReader sr = new StreamReader(_jsonPath))
+                using (StreamReader sr = new StreamReader(Tools._jsonPath))
                 {
                     string json =  sr.ReadToEnd();
                     sites =  JsonConvert.DeserializeObject<List<Website>>(json);
