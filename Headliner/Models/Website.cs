@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Headliner.Models.Enums;
 
 namespace Headliner.Models
 {
@@ -13,6 +14,7 @@ namespace Headliner.Models
         public string SiteName { get; set; }
         public bool Status { get; set; }
         public string ClassTag { get; set; }
+        public WebsiteType Category { get; set; }
 
         public Website()
         {

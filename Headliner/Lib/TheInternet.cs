@@ -10,6 +10,7 @@ using System.Reactive.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using static Headliner.Models.Enums;
 
 namespace Headliner.Lib
 {
@@ -49,6 +50,15 @@ namespace Headliner.Lib
 
             return  websites;
         }
+
+
+        public static List<Website> ReadFile(WebsiteType type)
+        {
+            return   (type == 0) ? ReadFile() :  ReadFile()
+                                                .Where(s => s.Category == type)
+                                                .ToList();           
+        }
+
 
 
         public  static  async  Task<List<int>> TestLongProcess(int x)

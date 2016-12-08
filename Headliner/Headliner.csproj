@@ -92,6 +92,7 @@
     <Compile Include="Lib\Downloader.cs" />
     <Compile Include="Lib\SearchEngine.cs" />
     <Compile Include="Lib\TheInternet.cs" />
+    <Compile Include="Models\Enums.cs" />
     <Compile Include="Models\Website.cs" />
     <Compile Include="Lib\UrlSource.cs" />
     <Page Include="MainWindow.xaml">

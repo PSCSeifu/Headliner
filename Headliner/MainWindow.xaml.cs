@@ -22,6 +22,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using WpfAnimatedGif;
+using static Headliner.Models.Enums;
 
 namespace Headliner
 {
@@ -51,7 +52,7 @@ namespace Headliner
         public void InitInterface()
         {
             //TestStream();
-            DisplayBulkHeadLines();            
+            DisplayBulkHeadLines(WebsiteType.Programming,6);            
             ShowWaitingGif(this.spinner, false);
         }
 
@@ -71,10 +72,10 @@ namespace Headliner
             }
         }
 
-        public async void DisplayBulkHeadLines()
+        public async void DisplayBulkHeadLines(WebsiteType type, int headlines)
         {
             int countSites = 0;            
-            List<Website> allSites = TheInternet.ReadFile();
+            List<Website> allSites = TheInternet.ReadFile(type);
             int totalSites = (allSites.Count() == 0 ) ? 1:allSites.Count();
 
             if (this.listView.Items.Count > 0) { this.listView.Items.Clear(); }
@@ -91,7 +92,7 @@ namespace Headliner
                                 .ObserveOn(Dispatcher)
                                 .Where(x => x.Length > 5)
                                 .Select(x => x.Trim())
-                                .Take(9)
+                                .Take(headlines)
                                 .Subscribe(x => PopulateView(site, x));
 
                 var statusLabel = data.ToObservable()

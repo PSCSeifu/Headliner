@@ -2,41 +2,49 @@
   {
     "WebSiteUri": "http://www.zerohedge.com",
     "SiteName": "ZEROHEDGE",
-    "ClassTag": "title"
+    "ClassTag": "title",
+    "Category": "CurrentNews"
   },
   {
     "WebSiteUri": "https://www.codeproject.com",
     "SiteName": "CODEPROJECT",
-    "ClassTag": "title"
+    "ClassTag": "title",
+    "Category": "Programming"
   },
   {
     "WebSiteUri": "https://dzone.com/",
     "SiteName": "DZONE",
-    "ClassTag": "featured-articles-title "
+    "ClassTag": "featured-articles-title ",
+    "Category": "Technology"
   },
   {
     "WebSiteUri": "https://dzone.com/",
     "SiteName": "DZONE",
-    "ClassTag": "featured-articles-title "
+    "ClassTag": "featured-articles-title ",
+    "Category": "Technology"
   },
   {
     "WebSiteUri": "http://www.infoq.com",
     "SiteName": "INFOQ",
-    "ClassTag": "title"
+    "ClassTag": "title",
+    "Category": "Programming"
   },
   {
     "WebSiteUri": "https://www.rt.com/news/",
     "SiteName": "RT",
-    "ClassTag": "card__header"
+    "ClassTag": "card__header",
+    "Category": "CurrentNews"
   },
   {
     "WebSiteUri": "https://www.reddit.com/r/ethereum/new/",
     "SiteName": "ETHEREUM_REDDIT_NEW",
-    "ClassTag": "title may-blank "
+    "ClassTag": "title may-blank ",
+    "Category": "Crypto"
   },
   {
     "WebSiteUri": "http://www.coindesk.com/",
     "SiteName": "COINDESK",
-    "ClassTag": "fade"
+    "ClassTag": "fade",
+    "Category": "Crypto"
   }
 ]
