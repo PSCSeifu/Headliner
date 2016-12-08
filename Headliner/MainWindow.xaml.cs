@@ -36,23 +36,23 @@ namespace Headliner
             Debug.WriteLine($"Current thread Id in ctor : {Thread.CurrentThread.ManagedThreadId}");
             InitializeComponent();
             ShowWaitingGif(this.spinner, true);
-
+            
             var buttonClick = Observable.FromEventPattern<RoutedEventHandler, RoutedEventArgs>
                 (
-                p => this.button.Click += p,
-                p => this.button.Click -= p);
+                p => this.Getall.Click += p,
+                p => this.Getall.Click -= p);
 
             buttonClick.Subscribe(Window =>
            {
                InitInterface();
            });
-            
+
         }
 
         public void InitInterface()
         {
             //TestStream();
-            DisplayBulkHeadLines(WebsiteType.Programming,6);            
+            DisplayBulkHeadLines(WebsiteType.None,6);            
             ShowWaitingGif(this.spinner, false);
         }
 
