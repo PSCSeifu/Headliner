@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,7 +11,14 @@ namespace Headliner.Models
     {
         public Uri WebSiteUri { get; set; }
         public string SiteName { get; set; }
+        [JsonIgnore]
+        [JsonProperty(Required = Required.Default)]
         public bool Status { get; set; }
+
+        public Website()
+        {
+                
+        }
 
         public Website(Uri uri, string name)
         {

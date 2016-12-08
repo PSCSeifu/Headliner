@@ -11,6 +11,7 @@
             <ColumnDefinition Width="6*"/>
             <ColumnDefinition Width="511*"/>
         </Grid.ColumnDefinitions>
+        <Image Name="spinner"></Image>
         <ListView x:Name="listView" Grid.Column="1" HorizontalAlignment="Left" Margin="23,136,0,30" Width="720">
             <ListView.View>
                 <GridView>

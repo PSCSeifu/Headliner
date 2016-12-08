@@ -13,6 +13,7 @@ namespace Headliner.Lib
     public class TheInternet
     {
         private static string _jsonPath = System.Configuration.ConfigurationManager.AppSettings["WebSiteFilePath"];
+        public static string _waitingGifPath = System.Configuration.ConfigurationManager.AppSettings["WaitingGifFilePath"];
 
         public static List<Website> ReadFile()
         {
@@ -25,7 +26,11 @@ namespace Headliner.Lib
                     sites = JsonConvert.DeserializeObject<List<Website>>(json);
                 }
             }
-            catch { sites = GetWebsites(); }
+            catch(Exception ex)
+            {
+                var x = ex;
+                sites = GetWebsites();
+            }
 
             return sites;
         }

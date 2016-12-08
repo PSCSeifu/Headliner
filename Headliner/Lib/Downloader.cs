@@ -35,5 +35,21 @@ namespace Headliner.Lib
             return  joined;
         }
 
+        public static async Task<List<string>> DownloadHtml(Website website)
+        {
+            var result = await Downloader.GetHtmlByWebsite(website);
+            return Downloader.GetHeadlineList(result).ToList();
+
+            //var headline = result.GetElementsByClassName("title").Select( x => x.TextContent);
+            //var links = result.GetElementsByTagName("a").Select(x => x.TextContent);
+            //var logo = result.GetElementsByClassName("logo").Select(x => x.InnerHtml);
+
+            //var joined = headline.Union(links.Union(logo));
+
+            //return joined.ToList();
+        }
+
+        
+
     }
 }

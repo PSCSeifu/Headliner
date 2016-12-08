@@ -18,5 +18,9 @@
   {
     "WebSiteUri": "https://www.rt.com/news",
     "SiteName": "RT"
+  },
+  {
+    "WebSiteUri": "https://www.reddit.com/r/ethereum/new/",
+    "SiteName": "ETHEREUM_REDDIT_NEW"
   }
 ]
