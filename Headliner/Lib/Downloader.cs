@@ -24,7 +24,7 @@ namespace Headliner.Lib
         }
 
         //main-promobox__link
-        public static  List<string> GetHeadlineList(IHtmlDocument doc)
+        public static List<string> GetHeadlineList(IHtmlDocument doc)
         {
             var joined = doc.GetElementsByClassName("title").Select(x => x.TextContent)
                 .Union(doc.GetElementsByTagName("a href").Select(x => x.TextContent))
@@ -32,13 +32,18 @@ namespace Headliner.Lib
                 ).ToList();
 
 
-            return  joined;
+            return joined;
+        }
+
+        public static List<string> GetHeadlineList(IHtmlDocument doc,string tagname)
+        {
+            return  doc.GetElementsByClassName(tagname).Select(x => x.TextContent).ToList();                
         }
 
         public static async Task<List<string>> DownloadHtml(Website website)
         {
             var result = await Downloader.GetHtmlByWebsite(website);
-            return Downloader.GetHeadlineList(result).ToList();
+            return Downloader.GetHeadlineList(result,website.ClassTag).ToList();
 
             //var headline = result.GetElementsByClassName("title").Select( x => x.TextContent);
             //var links = result.GetElementsByTagName("a").Select(x => x.TextContent);

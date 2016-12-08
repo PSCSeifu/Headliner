@@ -11,7 +11,7 @@
             <ColumnDefinition Width="6*"/>
             <ColumnDefinition Width="511*"/>
         </Grid.ColumnDefinitions>
-        <Image Name="spinner"></Image>
+        
         <ListView x:Name="listView" Grid.Column="1" HorizontalAlignment="Left" Margin="23,136,0,30" Width="720">
             <ListView.View>
                 <GridView>
@@ -21,6 +21,7 @@
         </ListView>
         <ListBox x:Name="sitelistBox" Grid.Column="1" HorizontalAlignment="Left" Height="98" Margin="23,19,0,0" VerticalAlignment="Top" Width="272"/>
         <TextBox x:Name="textBox" Grid.Column="1" HorizontalAlignment="Left" Height="31" Margin="319,19,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="403"/>
+        <Image Name="spinner"></Image>
         <Button x:Name="button" Content="Search" Grid.Column="1" HorizontalAlignment="Left" Height="53" Margin="319,64,0,0" VerticalAlignment="Top" Width="403"/>
 
     </Grid>

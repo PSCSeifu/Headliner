@@ -1,26 +1,37 @@
 [
   {
     "WebSiteUri": "http://www.zerohedge.com",
-    "SiteName": "ZEROHEDGE"
+    "SiteName": "ZEROHEDGE",
+    "ClassTag": "title"
   },
   {
     "WebSiteUri": "https://www.codeproject.com",
-    "SiteName": "CODEPROJECT"
+    "SiteName": "CODEPROJECT",
+    "ClassTag": ""
   },
   {
-    "WebSiteUri": "https://fsharpforfunandprofit.com/",
-    "SiteName": "FSHARPFORFUNANDPROFIT"
+    "WebSiteUri": "https://fsharpforfunandprofit.com",
+    "SiteName": "FSHARPFORFUNANDPROFIT",
+    "ClassTag": ""
   },
   {
     "WebSiteUri": "http://www.infoq.com",
-    "SiteName": "INFOQ"
+    "SiteName": "INFOQ",
+    "ClassTag": "title"
   },
   {
-    "WebSiteUri": "https://www.rt.com/news",
-    "SiteName": "RT"
+    "WebSiteUri": "https://www.rt.com/news/",
+    "SiteName": "RT",
+    "ClassTag": "card__header"
   },
   {
     "WebSiteUri": "https://www.reddit.com/r/ethereum/new/",
-    "SiteName": "ETHEREUM_REDDIT_NEW"
+    "SiteName": "ETHEREUM_REDDIT_NEW",
+    "ClassTag": "title may-blank "
+  },
+  {
+    "WebSiteUri": "http://www.coindesk.com/",
+    "SiteName": "COINDESK",
+    "ClassTag": "fade"
   }
 ]

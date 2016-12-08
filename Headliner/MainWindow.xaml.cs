@@ -32,6 +32,7 @@ namespace Headliner
         {
             //Trace.WriteLine($"Thread Name : {SynchronizationContext.Current.ToString()}");
             InitializeComponent();
+            ShowWaitingGif(this.spinner, true);
 
             var buttonClick = Observable.FromEventPattern<RoutedEventHandler, RoutedEventArgs>
                 (
@@ -45,16 +46,17 @@ namespace Headliner
             
         }
 
-        public void InitInterface()
+        public async void InitInterface()
         {
-           // ShowWaitingGif(this.spinner);
-            HeadlineFilter();
+           
+            await HeadlineFilter();
             PopulateSiteListbox();
+            ShowWaitingGif(this.spinner, false);
         }
 
-        public  async void HeadlineFilter()
+        public  async Task<int> HeadlineFilter()
         {
-            //this.listView.Items.Clear();
+            if (this.listView.Items.Count > 0) { this.listView.Items.Clear(); }
             foreach (var site in TheInternet.ReadFile())
             {
                 var data = await Downloader.DownloadHtml(site);
@@ -66,17 +68,28 @@ namespace Headliner
                      x => PopulateView(x, site.SiteName)
                     );          
             }
+            return 1;
         }
 
         #region UI Methods
 
-        public void ShowWaitingGif(Image element )
+        public void ShowWaitingGif(Image element,bool show )
         {
             var image = new BitmapImage();
-            image.BeginInit();
-            image.UriSource = new Uri(TheInternet._waitingGifPath);
-            image.EndInit();
-            ImageBehavior.SetAnimatedSource(element, image);
+            if (show)
+            {               
+                image.BeginInit();
+                image.UriSource = new Uri(TheInternet._waitingGifPath);
+                image.EndInit();
+                ImageBehavior.SetAnimatedSource(element, image);
+            }
+            else
+            {
+                image.UriSource = null;
+                //var controller = ImageBehavior.GetAnimationController(element);
+                //controller.Pause();
+            }
+
         }
 
         public void PopulateView(string text, string siteName)
