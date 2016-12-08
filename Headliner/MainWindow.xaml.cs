@@ -179,15 +179,17 @@ namespace Headliner
 
         #endregion
 
-        private async void textBox_TextChanged(object sender, TextChangedEventArgs e)
+
+        private async void search_Click(object sender, RoutedEventArgs e)
         {
             List<Website> allSites = TheInternet.ReadFile();
 
             var searchInput = Observable.FromEventPattern(this.textBox, "TextChanged")
                         .Select(w => this.textBox.Text)
+                        .Where(n => n.Count() > 3)
                         .Throttle(TimeSpan.FromSeconds(0.5))
                         .DistinctUntilChanged();
-                                    
+
 
             Tools.DebugTrace("ctor", Thread.CurrentThread.ManagedThreadId);
             Tools.DebugTrace(searchInput.ToString(), Thread.CurrentThread.ManagedThreadId);
@@ -198,10 +200,10 @@ namespace Headliner
                 var res = await Task.Run(() => SearchEngine.Search(site, searchInput.ToString()));
 
                 res.ToObservable()
+                    .ObserveOn(Dispatcher)
                     .Select(x => x)
                     .Subscribe(y => PopulateView(site, y));
             }
-           
         }
     }
 }
