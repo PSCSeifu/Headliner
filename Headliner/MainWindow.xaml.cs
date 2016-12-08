@@ -50,91 +50,62 @@ namespace Headliner
 
         public void InitInterface()
         {
-            TestStream();
-           // HeadlineFilter2();
-            //ShowHeadlines();
-            // HeadlineFilter();
-            //PopulateSiteListbox();
-            //ShowWaitingGif(this.spinner, false);
+            //TestStream();
+            DisplayBulkHeadLines();            
+            ShowWaitingGif(this.spinner, false);
         }
 
         public async void TestStream()
         {
-            Debug.WriteLine($"Current thread Id a : {Thread.CurrentThread.ManagedThreadId}");
-            //var seq = Observable.Interval(TimeSpan.FromMilliseconds(200));
-            var res = await Task.Run( () => TheInternet.TestLongProcess());
+            for (int i = 100; i > 0; i--)
+            {
+                var res = await Task.Run(() => TheInternet.TestLongProcess(i));
 
-            var seq = res.ToObservable();
-
-
-
-
-            Debug.WriteLine($"Current thread Id b : {Thread.CurrentThread.ManagedThreadId}");
-            var ui = seq
-                        .ObserveOn(Dispatcher)
-                         .Select(x => x)
-                        .Take(90)
-                        .Subscribe(test => this.listView.Items.Add(test));
+                var seq = res.ToObservable();
+                Debug.WriteLine($"Current thread Id b : {Thread.CurrentThread.ManagedThreadId}");
+                var ui = seq
+                            .ObserveOn(Dispatcher)
+                             .Select(x => x)
+                            .Take(90)
+                            .Subscribe(test => this.listView.Items.Add(test));
+            }
         }
 
-        public async void HeadlineFilter2()
+        public async void DisplayBulkHeadLines()
         {
+            int countSites = 0;            
+            List<Website> allSites = TheInternet.ReadFile();
+            int totalSites = (allSites.Count() == 0 ) ? 1:allSites.Count();
+
             if (this.listView.Items.Count > 0) { this.listView.Items.Clear(); }
+            if (this.sitelistBox.Items.Count > 0) { this.sitelistBox.Items.Clear(); }
 
-            Debug.WriteLine($"Current thread Id before loop : {Thread.CurrentThread.ManagedThreadId}");
-
-            foreach (var site in TheInternet.ReadFile())
+            PopulateSiteListbox();
+            
+            foreach (var site in allSites)
             {
-                Debug.WriteLine($"Current thread Id in loop: {Thread.CurrentThread.ManagedThreadId}");
-                var data = await Downloader.DownloadHtml(site);
+                countSites++;
+                var data = await Task.Run( () => Downloader.DownloadHtml(site));
 
-                //var dataStream = data.ToObservable()
-                //                .ObserveOn(SynchronizationContext.Current)
-                //                .Where( x => x.Length > 5)
-                //                .Select( x => x.Trim())
-                //                .Take(9)                            
-                //                .Subscribe(test => this.listView.Items.Add($"Site : {site.SiteName} | {Environment.NewLine} {test}"));
-
-                var ui = data.ToObservable()
+                var listView = data.ToObservable()
                                 .ObserveOn(Dispatcher)
                                 .Where(x => x.Length > 5)
                                 .Select(x => x.Trim())
                                 .Take(9)
-                                .Subscribe(test => this.listView.Items.Add($"Site : {site.SiteName} | {Environment.NewLine} {test}"));
-                Debug.WriteLine($"Current thread Id in loop: {Thread.CurrentThread.ManagedThreadId}");
+                                .Subscribe(x => PopulateView(site, x));
+
+                var statusLabel = data.ToObservable()
+                    .ObserveOn(Dispatcher)
+                    .Subscribe(x => PopulateLabel($"From {site.SiteName}  |  Feteched {countSites} of {totalSites}"));
             }
-        }
-
-        public void ShowHeadlines()
-        {
-            //TheInternet.ReadFile().ForEach(HeadlineFilter2);
-        }
-
-        public async void HeadlineFilter()
-        {
-            if (this.listView.Items.Count > 0) { this.listView.Items.Clear(); }
-
-            //var seq = Observable.Interval(TimeSpan.FromMilliseconds(1500))
-            //    .Select( x => x)
-            //    .ObserveOn(SynchronizationContext.Current)
-            //    .Subscribe( test => this.listView.Items.Add(test));
-
-            foreach (var site in TheInternet.ReadFile())
-            {
-                var data = await Downloader.DownloadHtml(site);
-                var list = data.ToObservable()
-                    .SubscribeOn(NewThreadScheduler.Default)
-                                .Take(5)
-                                .Select(x => x);
-
-                list.ObserveOn(SynchronizationContext.Current).Subscribe(
-                     x => PopulateView(x, site.SiteName)
-                    );
-            }
-            // return 1;
         }
 
         #region UI Methods
+
+        public void PopulateLabel(string value)
+        {
+            this.statuslabel.Content = value;
+        }
 
         public void ShowWaitingGif(Image element,bool show )
         {
@@ -155,21 +126,14 @@ namespace Headliner
 
         }
 
-        public void PopulateView(string text, string siteName)
-        {
-            
-            this.listView.Items.Add($"Site : {siteName} | {Environment.NewLine} {text.Trim()}");          
+        public void PopulateView(Website site, string text)
+        {            
+            this.listView.Items.Add($"Site : {site.SiteName} | {Environment.NewLine} {text.Trim()}");          
         }
       
         public void PopulateSiteListbox()
         {
-            this.sitelistBox.Items.Clear();
-            TheInternet.ReadFile().ForEach(GetName);
-        }
-
-        public void GetName(Website site)
-        {
-            this.sitelistBox.Items.Add(site.SiteName);
+            TheInternet.ReadFile().ForEach( site => this.sitelistBox.Items.Add(site.SiteName));
         }
 
         #endregion

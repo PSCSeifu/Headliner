@@ -11,8 +11,6 @@ namespace Headliner.Models
     {
         public Uri WebSiteUri { get; set; }
         public string SiteName { get; set; }
-        //[JsonIgnore]
-        //[JsonProperty(Required = Required.Default)]
         public bool Status { get; set; }
         public string ClassTag { get; set; }
 

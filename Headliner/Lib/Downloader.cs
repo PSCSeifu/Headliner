@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Reactive.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Headliner.Lib
@@ -23,17 +24,6 @@ namespace Headliner.Lib
             return result;
         }
 
-        //main-promobox__link
-        //public static List<string> GetHeadlineList(IHtmlDocument doc)
-        //{
-        //    var joined = doc.GetElementsByClassName("title").Select(x => x.TextContent)
-        //        .Union(doc.GetElementsByTagName("a href").Select(x => x.TextContent))
-        //        .Union(doc.GetElementsByClassName("main-promobox__link").Select(x => x.TextContent)
-        //        ).ToList();
-
-        //    return joined;
-        //}
-
         public static List<string> GetHeadlineList(IHtmlDocument doc,string tagname)
         {
             return  doc.GetElementsByClassName(tagname).Select(x => x.TextContent).ToList();                
@@ -44,13 +34,5 @@ namespace Headliner.Lib
             var result = await Downloader.GetHtmlByWebsite(website);
             return Downloader.GetHeadlineList(result,website.ClassTag).ToList();
         }
-
-        //public static async GetSiteHeadlines()
-        //{
-
-        //}
-
-        
-
     }
 }

@@ -50,11 +50,12 @@ namespace Headliner.Lib
             return  websites;
         }
 
-        public  static  async  Task<List<int>> TestLongProcess()
+
+        public  static  async  Task<List<int>> TestLongProcess(int x)
         {
             Debug.WriteLine($"Current thread Id in Lib : {Thread.CurrentThread.ManagedThreadId}");
             List<int> collec = new List<int>();
-            for (int i = 95; i > 0; i--)
+            for (int i = x; i > 0; i--)
             {
                 var bl = await fakeProcess();
                  Thread.Sleep(100);
@@ -62,7 +63,6 @@ namespace Headliner.Lib
             }
             return  collec;
         }
-
        
         private static  async Task<string>  fakeProcess()
         {
