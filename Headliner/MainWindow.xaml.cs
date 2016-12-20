@@ -35,7 +35,7 @@ namespace Headliner
         {
            Tools.DebugTrace("ctor", Thread.CurrentThread.ManagedThreadId);            
             InitializeComponent();
-            ShowWaitingGif(this.spinner, true);
+            //ShowWaitingGif(this.spinner, true);
             
             var buttonClick = Observable.FromEventPattern<RoutedEventHandler, RoutedEventArgs>
                 (
@@ -53,7 +53,7 @@ namespace Headliner
         {
             //TestStream();
             DisplayBulkHeadLines(WebsiteType.None,6);            
-            ShowWaitingGif(this.spinner, false);
+            //ShowWaitingGif(this.spinner, false);
         }
 
         public async void TestStream()
